@@ -14,13 +14,12 @@ class CommandSender implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
 			try {
 				output.write(command.getBytes());
+				output.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
 		// try {
 		// writer.write(command, 0, command.length());
 		// writer.flush();
