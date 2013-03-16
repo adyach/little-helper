@@ -1,5 +1,5 @@
-char buffer[8];
-int commandSize = 8;
+char buffer[9];
+byte commandSize = 8;
 
 byte leftEngine = 9;
 byte rightEngine = 10;
@@ -24,25 +24,18 @@ int fullStart = 255;
   
 void loop() {
     
-  
-      
-//  if (off && brightness > 0) {    
-//     brightness = brightness - fadeAmount;
-//  } else if (on && brightness < 255){
-//     brightness = brightness + fadeAmount;
-//  }
-//  
-//  analogWrite(9, brightness);  
-//  delay(30);
 }
 
 void serialEvent() {
   if (Serial.available() > 0) {
       int n = Serial.readBytesUntil('\n', buffer, commandSize);
       if (n >= 0) {
+        // set end of the string
         buffer[n] = '\0';
         recievedCmd = buffer;
+        // send response to server
         Serial.print(recievedCmd);
+        Serial.flush();
       }
     
       if (recievedCmd == cmdStop) 
