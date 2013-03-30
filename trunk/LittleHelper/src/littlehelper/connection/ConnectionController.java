@@ -19,7 +19,7 @@ public class ConnectionController implements IConnection {
 	private static Logger log = Logger.getLogger(ConnectionController.class);
 
 	private static IConnection instance;
-	private static final String PORT_NAMES[] = { "COM10" };
+	private static final String PORT_NAMES[] = { "COM14" };
 
 	private static final int TIME_OUT = 5000;
 	private static final int DATA_RATE = 9600;

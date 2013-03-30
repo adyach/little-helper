@@ -1,5 +1,5 @@
-char buffer[6];
-byte commandSize = 5;
+char buffer[7];
+byte commandSize = 6;
 
 byte leftEngine = 7;
 byte rightEngine = 8;
@@ -25,30 +25,11 @@ void setup() {
 }
 
 void loop() {
-  val_sum = 0;
-  int counter = 0;
-  while(1){
-    int i = detectPresence();
-    if (i > 0) {
-      val_sum += i;
-      counter ++;  
-    }
-
-    if (counter == 5) {
-      break;
-    }    
-  }
-    
-  if (val_sum > 600) {
-    digitalWrite(6, HIGH);
-  } else {
-    digitalWrite(6, LOW);    
-  }
+//  grabStatistics();
 }
 
 void sendResponse(String response) {
-  Serial.print(response);
-  Serial.flush();
+  Serial.print("cmd " + response);
 }
 
 void serialEvent() {
@@ -62,7 +43,7 @@ void serialEvent() {
       motion(recievedCmd);
 
       // send response to server
-      sendResponse("cmd " + recievedCmd);
+      sendResponse(recievedCmd);
     }
   }
 }
@@ -105,6 +86,29 @@ void motion(String recievedCmd) {
   }
 }
 
+void grabStatistics() {
+  val_sum = 0;
+  int counter = 0;
+  while(1){
+    int i = detectPresence();
+    if (i > 0) {
+      val_sum += i;
+      counter ++;  
+    }
+
+    if (counter == 5) {
+      break;
+    }    
+  }
+
+  if (val_sum > 600) {
+    digitalWrite(6, HIGH);
+  } 
+  else {
+    digitalWrite(6, LOW);    
+  }
+}
+
 int detectPresence() {
   digitalWrite(9, HIGH);    // зажигаем
   digitalWrite(10, HIGH);
@@ -127,5 +131,7 @@ int detectPresence() {
   val = (val + val2 + val3 + val4)/4;
   return val;
 }
+
+
 
 

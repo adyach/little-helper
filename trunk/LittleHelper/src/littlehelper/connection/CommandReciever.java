@@ -19,7 +19,7 @@ class CommandReciever implements Runnable {
 
 	private static Logger log = Logger.getLogger(CommandReciever.class);
 
-	private final byte DATA_SIZE = 10;
+	private final byte DATA_SIZE = 9;
 	private final InputStream input;
 
 	private BlockingQueue<String> responsesQueue = new ArrayBlockingQueue<String>(10);
@@ -51,19 +51,21 @@ class CommandReciever implements Runnable {
 				// response[i] = (char) ch;
 				// }
 				// }
+				response = new byte[DATA_SIZE];
+				if (input.available() > 8) {
+					ch = input.read(response);
 
-				ch = input.read(response);
+					if (ch != -1) {
+						responseCommand = new String(response).trim();
 
-				if (ch != -1) {
-					responseCommand = new String(response).trim();
+						if (responseCommand.isEmpty()) {
+							throw new InterruptedException();
+						}
 
-					if (responseCommand.isEmpty()) {
-						throw new InterruptedException();
+						responsesQueue.put(responseCommand);
+
+						log.debug("Controller responses: " + responseCommand);
 					}
-
-					responsesQueue.put(responseCommand);
-
-					log.debug("Controller responses: " + responseCommand);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
