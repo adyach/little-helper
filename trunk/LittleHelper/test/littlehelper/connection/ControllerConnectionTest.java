@@ -5,13 +5,16 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+/**
+ * @author Andrey Dyachkov
+ */
 public class ControllerConnectionTest {
 	IConnection conn = null;
 
 	@Test
 	public void testConnection() throws Exception {
 
-		conn = ControllerConnection.getInstance();
+		conn = ConnectionController.getInstance();
 
 		assertNotNull(conn);
 

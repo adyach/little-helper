@@ -12,21 +12,23 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import littlehelper.connection.ControllerConnection;
+import littlehelper.connection.ConnectionController;
 import littlehelper.connection.IConnection;
 
+/**
+ * @author Andrey Dyachkov
+ */
 public class LittleHelperClient implements Runnable, ActionListener {
 	private static IConnection conn;
-	JTextField textField = new JTextField("00000001");
+	JTextField textField = new JTextField("01");
 	JTextArea textArea = new JTextArea("incoming command");
 
 	public static void main(String[] args) throws Exception {
 		// SerialSwitch main = new SerialSwitch();
 		// main.initialize();
-		conn = ControllerConnection.getInstance();
+		conn = ConnectionController.getInstance();
 		SwingUtilities.invokeLater(new LittleHelperClient());
 
-		System.out.println("Started");
 	}
 
 	private void createAndShowGui() {
