@@ -113,8 +113,6 @@ public class LittleHelperClient implements Runnable, ActionListener {
 			Point newPoint = e.getPoint();
 
 			if (!newPoint.equals(oldPoint)) {
-				log.debug("newPoint: " + newPoint);
-				log.debug("oldPoint: " + oldPoint);
 				if (newPoint.getX() > oldPoint.getX()) {
 					command = "00010";
 				} else if (newPoint.getX() < oldPoint.getX()) {
