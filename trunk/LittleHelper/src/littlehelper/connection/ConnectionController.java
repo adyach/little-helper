@@ -1,14 +1,15 @@
 package littlehelper.connection;
 
 import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class ConnectionController implements IConnection {
 	private static Logger log = Logger.getLogger(ConnectionController.class);
 
 	private static IConnection instance;
-	private static final String PORT_NAMES[] = { "COM14" };
+	private static final String PORT_NAMES[] = { "COM31" };
 
 	private static final int TIME_OUT = 5000;
 	private static final int DATA_RATE = 9600;
@@ -70,9 +71,9 @@ public class ConnectionController implements IConnection {
 	@Override
 	public String retrieveCommand() throws IOException {
 		try {
-			if (!commandReciever.isStarted()) {
-				executor.submit(commandReciever);
-			}
+			// if (!commandReciever.isStarted()) {
+			executor.submit(commandReciever);
+			// }
 
 			// executor.awaitTermination(500, TimeUnit.MILLISECONDS);
 			// Thread reciever = new Thread(commandReciever);
@@ -88,9 +89,16 @@ public class ConnectionController implements IConnection {
 	}
 
 	private void open() {
-		CommPortIdentifier portId = findPortId();
-		if (portId == null) {
-			System.out.println("Could not find COM port.");
+		// CommPortIdentifier portId = findPortId();
+		// if (portId == null) {
+		// System.out.println("Could not find COM port.");
+		// return;
+		// }
+		CommPortIdentifier portId;
+		try {
+			portId = CommPortIdentifier.getPortIdentifier("COM31");
+		} catch (NoSuchPortException e1) {
+			e1.printStackTrace();
 			return;
 		}
 
@@ -106,25 +114,35 @@ public class ConnectionController implements IConnection {
 		}
 	}
 
-	private synchronized void close() {
+	public void close() {
 		if (serialPort == null) {
 			return;
 		}
+		executor.shutdown();
+		try {
+			executor.awaitTermination(3, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		serialPort.close();
+
+		log.debug(" --- Conenction closed --- ");
 	}
 
-	private CommPortIdentifier findPortId() {
-		CommPortIdentifier portId = null;
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-		while (portEnum.hasMoreElements()) {
-			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-			for (String portName : PORT_NAMES) {
-				if (currPortId.getName().equals(portName)) {
-					portId = currPortId;
-					break;
-				}
-			}
-		}
-		return portId;
-	}
+	// private CommPortIdentifier findPortId() {
+	// CommPortIdentifier portId = null;
+	// Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+	// while (portEnum.hasMoreElements()) {
+	// CommPortIdentifier currPortId = (CommPortIdentifier)
+	// portEnum.nextElement();
+	// log.debug("currPortId: " + currPortId.getName());
+	// for (String portName : PORT_NAMES) {
+	// if (currPortId.getName().equals(portName)) {
+	// portId = currPortId;
+	// break;
+	// }
+	// }
+	// }
+	// return portId;
+	// }
 }

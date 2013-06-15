@@ -39,7 +39,7 @@ class CommandReciever implements Runnable {
 		int ch;
 		// char[] response = new char[DATA_SIZE];
 
-		byte[] response = new byte[DATA_SIZE];
+		byte[] response;
 
 		while (true) {
 			try {
@@ -67,11 +67,11 @@ class CommandReciever implements Runnable {
 						log.debug("Controller responses: " + responseCommand);
 					}
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
 			} catch (InterruptedException e) {
 				log.debug("Empty response was got from controller");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
