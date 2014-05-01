@@ -1,0 +1,7 @@
+sudo rfkill unblock bluetooth
+sudo hcitool scan
+Scanning ...
+00:02:C7:7D:F5:17	BlueGPS 7DF517
+sudo rfcomm bind /dev/rfcomm0 00:02:C7:7D:F5:17 1
+ls -l /dev/rfcomm0
+crw-rw---- 1 root dialout 216, 0 2008-12-14 23:15 /dev/rfcomm0
