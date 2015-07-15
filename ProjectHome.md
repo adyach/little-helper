@@ -1,0 +1,1 @@
+Little Helper will fullfill simple commands, speach recognition and vision.
